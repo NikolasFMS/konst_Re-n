@@ -11,6 +11,8 @@ const charsetEl = document.getElementById('charset'); // Выбор набора
 const barEl = document.getElementById('bar'); // Полоса прогресс-бара
 const use24El = document.getElementById('use24'); // Чекбокс 24-часового формата
 const leadingZerosEl = document.getElementById('previewLeadingZeros'); // Чекбокс для ведущих нулей
+const addDateEl = document.getElementById('addDate'); // Чекбокс для добавления даты
+const addTimeEl = document.getElementById('addTime'); // Чекбокс для добавления времени
 
 // Новые элементы
 const addPrefixEl = document.getElementById('addPrefix'); // Чекбокс "добавить префикс"
@@ -92,25 +94,27 @@ async function scanDirectory() {
     }
 
     // Собираем все текущие настройки в один объект для удобства
-    const options = {
-        separator: sepEl.value,
-        minLen: parseInt(randMinEl.value) || 8,
-        maxLen: parseInt(randMaxEl.value) || 12,
-        charset: charsetEl.value,
-        use24: use24El.checked,
-        leadingZeros: leadingZerosEl.checked,
-        addPrefix: addPrefixEl.checked,
-        prefix: prefixEl.value,
-        addSuffix: addSuffixEl.checked,
-        suffix: suffixEl.value,
-        addSeqNum: addSeqNumEl.checked,
-        seqNumPos: seqNumPosEl.value,
-        seqNumPad: parseInt(seqNumPadEl.value) || 3,
-        addRandomChar: addRandomCharEl.checked,
-        randomCharSet: randomCharSetEl.value
-    };
-
-    // Создаем три колонки для имен, стрелок и новых имен
+         const options = {
+             separator: sepEl.value,
+             minLen: parseInt(randMinEl.value) || 8,
+             maxLen: parseInt(randMaxEl.value) || 12,
+             charset: charsetEl.value,
+             use24: use24El.checked,
+             leadingZeros: leadingZerosEl.checked,
+             addDate: addDateEl.checked,
+             addTime: addTimeEl.checked,
+             addPrefix: addPrefixEl.checked,
+             prefix: prefixEl.value,
+             addSuffix: addSuffixEl.checked,
+             suffix: suffixEl.value,
+             addSeqNum: addSeqNumEl.checked,
+             seqNumPos: seqNumPosEl.value,
+             seqNumPad: parseInt(seqNumPadEl.value) || 3,
+             addRandomChar: addRandomCharEl.checked,
+             randomCharSet: randomCharSetEl.value
+         };
+    
+         // Создаем три колонки для имен, стрелок и новых имен
     const oldNamesCol = document.createElement('div');
     const arrowCol = document.createElement('div');
     const newNamesCol = document.createElement('div');
@@ -249,12 +253,12 @@ function makeTimestamp(use24=true, leadingZeros=true){
 function generateName(options, seqNum = 1) {
   // Деструктуризация объекта опций для удобства
   const {
-      separator, minLen, maxLen, charset, use24, leadingZeros,
+      separator, minLen, maxLen, charset, use24, leadingZeros, addDate, addTime,
       addPrefix, prefix, addSuffix, suffix, addSeqNum, seqNumPos, seqNumPad, addRandomChar, randomCharSet
   } = options;
 
-  // Создаем временную метку
-  const ts = makeTimestamp(use24, leadingZeros);
+  // Создаем временную метку, если нужно
+  const ts = (addDate || addTime) ? makeTimestamp(use24, leadingZeros) : null;
   // Определяем длину случайной строки
   const len = randInt(Math.min(minLen, maxLen), Math.max(minLen, maxLen));
   // Генерируем саму случайную строку
@@ -263,17 +267,30 @@ function generateName(options, seqNum = 1) {
   // Собираем случайную часть имени
   let randomPart = r;
   // Если нужно, добавляем случайный символ в случайную часть
-  if (addRandomChar && randomCharSet && randomCharSet.length > 0) {
+  if (addRandomChar && randomCharSet.length > 0) {
       const randomSymbols = randomCharSet.split(''); // Получаем массив символов
       const randomSymbol = randomSymbols[Math.floor(Math.random() * randomSymbols.length)]; // Выбираем один
       const pos = randInt(0, randomPart.length); // Выбираем позицию для вставки
       randomPart = randomPart.slice(0, pos) + randomSymbol + randomPart.slice(pos); // Вставляем
   }
   
-  // Собираем базовое имя из даты/времени и случайной части
-  let baseName = `${ts.month}${separator}${ts.day}${separator}${ts.hour}${separator}${ts.minute}${separator}${randomPart}`;
+  // Собираем базовое имя
+  let baseName = '';
+  if (addDate && addTime) {
+      // Собираем базовое имя из даты, времени и случайной части
+      baseName = `${ts.month}${separator}${ts.day}${separator}${ts.hour}${separator}${ts.minute}${separator}${randomPart}`;
+  } else if (addDate) {
+      // Только дата и случайная часть
+      baseName = `${ts.month}${separator}${ts.day}${separator}${randomPart}`;
+  } else if (addTime) {
+      // Только время и случайная часть
+      baseName = `${ts.hour}${separator}${ts.minute}${separator}${randomPart}`;
+  } else {
+      // Только случайная часть
+      baseName = randomPart;
+  }
 
-  // Добавляем префикс, если нужно
+ // Добавляем префикс, если нужно
   if (addPrefix && prefix) {
       baseName = prefix + baseName;
   }
@@ -294,11 +311,11 @@ function generateName(options, seqNum = 1) {
       }
   }
 
-  return baseName; // Возвращаем готовое имя
+ return baseName; // Возвращаем готовое имя
 }
 
 // Назначаем единый обработчик 'input' на все элементы управления для обновления предпросмотра
-[sepEl, randMinEl, randMaxEl, charsetEl, use24El, leadingZerosEl, addPrefixEl, prefixEl, addSuffixEl, suffixEl, addSeqNumEl, seqNumPosEl, seqNumPadEl, addRandomCharEl, randomCharSetEl].forEach(el => {
+[sepEl, randMinEl, randMaxEl, charsetEl, use24El, leadingZerosEl, addDateEl, addTimeEl, addPrefixEl, prefixEl, addSuffixEl, suffixEl, addSeqNumEl, seqNumPosEl, seqNumPadEl, addRandomCharEl, randomCharSetEl].forEach(el => {
   el.addEventListener('input', updatePreview);
 });
 
@@ -323,23 +340,25 @@ renameBtn.addEventListener('click', async () => {
   let done = 0; // Счетчик обработанных файлов
   
   // Собираем все настройки в один объект
-  const options = {
-      separator: sepEl.value,
-      minLen: parseInt(randMinEl.value) || 8,
-      maxLen: parseInt(randMaxEl.value) || 12,
-      charset: charsetEl.value,
-      use24: use24El.checked,
-      leadingZeros: leadingZerosEl.checked,
-      addPrefix: addPrefixEl.checked,
-      prefix: prefixEl.value,
-      addSuffix: addSuffixEl.checked,
-      suffix: suffixEl.value,
-      addSeqNum: addSeqNumEl.checked,
-      seqNumPos: seqNumPosEl.value,
-      seqNumPad: parseInt(seqNumPadEl.value) || 3,
-      addRandomChar: addRandomCharEl.checked,
-      randomCharSet: randomCharSetEl.value
-  };
+    const options = {
+        separator: sepEl.value,
+        minLen: parseInt(randMinEl.value) || 8,
+        maxLen: parseInt(randMaxEl.value) || 12,
+        charset: charsetEl.value,
+        use24: use24El.checked,
+        leadingZeros: leadingZerosEl.checked,
+        addDate: addDateEl.checked,
+        addTime: addTimeEl.checked,
+        addPrefix: addPrefixEl.checked,
+        prefix: prefixEl.value,
+        addSuffix: addSuffixEl.checked,
+        suffix: suffixEl.value,
+        addSeqNum: addSeqNumEl.checked,
+        seqNumPos: seqNumPosEl.value,
+        seqNumPad: parseInt(seqNumPadEl.value) || 3,
+        addRandomChar: addRandomCharEl.checked,
+        randomCharSet: randomCharSetEl.value
+   };
 
   const log = []; // Массив для записи лога изменений
   let currentSeq = 1; // Начальный порядковый номер
