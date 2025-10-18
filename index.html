@@ -35,19 +35,22 @@
   </div>
 
   <!-- Ряд с настройками формата данных -->
-  <div class="row">
-    <label>Набор символов:
-      <select id="charset">
-        <option value="alnum" selected>буквы + цифры</option>
-        <option value="alnum_sym">буквы + цифры + символы</option>
-        <option value="hex">шестнадцатеричный (0-9a-f)</option>
-        <option value="digits">только цифры</option>
-      </select>
-    </label>
+     <div class="row">
+       <label>Набор символов:
+         <select id="charset">
+           <option value="alnum" selected>буквы + цифры</option>
+           <option value="alnum_sym">буквы + цифры + символы</option>
+           <option value="hex">шестнадцатеричный (0-9a-f)</option>
+           <option value="digits">только цифры</option>
+         </select>
+       </label>
+  
+            <label><input type="checkbox" id="addDate" checked /> Добавить дату</label>
+            <label><input type="checkbox" id="addTime" checked /> Добавить время</label>
+            <label><input type="checkbox" id="previewLeadingZeros" checked /> Дополнить дату и время нулями</label>
+            <label><input type="checkbox" id="use24" checked /> 24-часовой формат времени</label>
 
-    <label><input type="checkbox" id="use24" checked /> 24-часовой формат времени</label>
-    <label><input type="checkbox" id="previewLeadingZeros" checked /> Дополнить дату и время нулями</label>
-  </div>
+     </div>
 
   <!-- Ряд для префикса и суффикса -->
   <div class="row">
