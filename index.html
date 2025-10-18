@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Пакетное переименование файлов</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Пакетное переименование файлов в папке</h1>
+
+<!-- Основная панель управления -->
+<div class="panel">
+  <!-- Ряд для выбора папки -->
+  <div class="row">
+    <button id="pickDirBtn">Выбрать папку</button>
+    <div id="dirName">Папка не выбрана</div>
+  </div>
+
+  <!-- Ряд с основными настройками генерации имени -->
+  <div class="row">
+    <label>Разделитель:
+      <select id="sep">
+        <option value=".">точка ( . )</option>
+        <option value="-">тире ( - )</option>
+        <option value="_">подчёркивание ( _ )</option>
+        <option value=" ">пробел</option>
+      </select>
+    </label>
+
+    <label>Диапазон длины случайной строки:
+      <input id="randMin" type="number" min="1" value="8" style="width:70px" /> — 
+      <input id="randMax" type="number" min="1" value="12" style="width:70px" />
+    </label>
+  </div>
+
+  <!-- Ряд с настройками формата данных -->
+  <div class="row">
+    <label>Набор символов:
+      <select id="charset">
+        <option value="alnum" selected>буквы + цифры</option>
+        <option value="alnum_sym">буквы + цифры + символы</option>
+        <option value="hex">шестнадцатеричный (0-9a-f)</option>
+        <option value="digits">только цифры</option>
+      </select>
+    </label>
+
+    <label><input type="checkbox" id="use24" checked /> 24-часовой формат времени</label>
+    <label><input type="checkbox" id="previewLeadingZeros" checked /> Дополнить дату и время нулями</label>
+  </div>
+
+  <!-- Ряд для префикса и суффикса -->
+  <div class="row">
+      <label><input type="checkbox" id="addPrefix" /> Добавить префикс: <input type="text" id="prefix" value="photo_" style="width:100px" disabled /></label>
+      <label><input type="checkbox" id="addSuffix" /> Добавить суффикс: <input type="text" id="suffix" value="_final" style="width:100px" disabled /></label>
+  </div>
+
+  <!-- Ряд для порядкового номера -->
+  <div class="row">
+      <label><input type="checkbox" id="addSeqNum" /> Добавить порядковый номер:</label>
+      <select id="seqNumPos" disabled>
+          <option value="start">в начале</option>
+          <option value="end">в конце</option>
+      </select>
+      <label title="Количество цифр в номере, например 3 → 001">с паддингом до <input type="number" id="seqNumPad" value="3" min="1" max="10" style="width:50px" disabled /></label>
+  </div>
+    
+  <!-- Ряд для случайного символа -->
+  <div class="row">
+      <label><input type="checkbox" id="addRandomChar" /> Добавить случайный символ из набора:</label>
+      <input type="text" id="randomCharSet" value="-#*" style="width:80px" disabled />
+  </div>
+
+  <!-- Ряд с основной кнопкой действия -->
+  <div class="row">
+    <button id="renameBtn" disabled>Переименовать файлы</button>
+  </div>
+
+  <!-- Блок для отображения списка файлов и предпросмотра -->
+  <div style="margin-top:10px">
+    <strong>Файлы в выбранной папке:</strong>
+    <div id="msg" style="margin:6px 0; color:#666"></div>
+    <div class="file-list" id="fileList">—</div>
+  </div>
+
+  <!-- Индикатор прогресса -->
+  <div class="progress" title="Прогресс">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <!-- Блок для вывода результатов переименования -->
+  <div id="result" style="margin-top:10px"></div>
+</div>
+
+<!-- HTML-структура модального окна -->
+<div id="customModal" class="modal-overlay">
+  <div class="modal-content">
+    <div id="modalBody" class="modal-body"></div>
+    <div class="modal-footer">
+      <button id="modalCancel">Отмена</button>
+      <button id="modalOk">OK</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

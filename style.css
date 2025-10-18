@@ -1,0 +1,58 @@
+/* --- Базовые стили для страницы --- */
+body { font-family: Inter, system-ui, Arial; max-width:900px; margin:20px auto; padding:16px; line-height:1.45; color:#111; }
+h1 { font-size:20px; margin-bottom:6px; }
+
+/* --- Стили для элементов управления --- */
+.row { display:flex; gap:10px; align-items:center; margin:8px 0; flex-wrap:wrap; }
+label { font-size:14px; }
+input[type="number"], select, input[type="text"] { padding:6px 8px; font-size:14px; }
+button { padding:8px 12px; font-size:14px; cursor:pointer; }
+
+/* --- Стили для контейнеров и панелей --- */
+.panel { border:1px solid #ddd; padding:12px; border-radius:8px; background:#fafafa; margin-top:12px; }
+pre { background:#222; color:#dfe; padding:12px; border-radius:6px; overflow:auto; }
+
+/* --- Стили для списка файлов (двухколоночный) --- */
+.file-list { max-height:200px; overflow:auto; border:1px solid #eee; padding:8px; border-radius:6px; background:#fff; display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; }
+.file-list > div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* Защита от слишком длинных имен */
+.arrow-col { text-align: center; } /* Колонка со стрелками */
+
+/* --- Стили для индикатора прогресса --- */
+.progress { height:12px; background:#eee; border-radius:6px; overflow:hidden; margin-top:8px; }
+.bar { height:100%; width:0%; background:linear-gradient(90deg,#7db9ff,#2b6df6); transition:width .25s; }
+
+/* --- Стили для сообщений --- */
+.danger { color:#a00; } /* Красный для ошибок */
+.ok { color:#0a6; } /* Зеленый для успеха */
+
+/* --- Стили для модального окна --- */
+.modal-overlay {
+  position: fixed; /* Фиксированное позиционирование относительно окна браузера */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  display: flex; /* Используем flex для центрирования */
+  align-items: center; /* Вертикальное центрирование */
+  justify-content: center; /* Горизонтальное центрирование */
+  z-index: 1000; /* Поверх всех остальных элементов */
+  display: none; /* Скрыто по умолчанию */
+}
+.modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3); /* Тень для объема */
+}
+.modal-body {
+  margin-bottom: 16px; /* Отступ под текстом */
+  font-size: 16px;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end; /* Кнопки справа */
+  gap: 10px; /* Расстояние между кнопками */
+}
