@@ -1,6 +1,6 @@
 /* --- Базовые стили для страницы --- */
 body { font-family: Inter, system-ui, Arial; max-width:900px; margin:20px auto; padding:16px; line-height:1.45; color:#111; }
-h1 { font-size:20px; margin-bottom:6px; }
+h1 { font-size:20px; margin-bottom:6px; margin: 12px auto; max-width: 590px; }
 
 /* --- Стили для элементов управления --- */
 .row { display:flex; gap:10px; align-items:center; margin:8px 0; flex-wrap:wrap; }
@@ -9,7 +9,7 @@ input[type="number"], select, input[type="text"] { padding:6px 8px; font-size:14
 button { padding:8px 12px; font-size:14px; cursor:pointer; }
 
 /* --- Стили для контейнеров и панелей --- */
-.panel { border:1px solid #ddd; padding:12px; border-radius:8px; background:#fafafa; margin-top:12px; }
+.panel { border:1px solid #ddd; padding:12px; border-radius:8px; background:#fafafa; margin: 12px auto; max-width: 590px; }
 pre { background:#222; color:#dfe; padding:12px; border-radius:6px; overflow:auto; }
 
 /* --- Стили для списка файлов (двухколоночный) --- */
